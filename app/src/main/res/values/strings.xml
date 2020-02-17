@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">ViewPager2 Slider</string>
+    <string name="detail">Born deep underground, it comes aboveground and becomes a pupa once it has finished eating the surrounding soil.</string>
+    <string name="name">Larvitar</string>
 </resources>
