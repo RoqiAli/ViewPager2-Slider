@@ -41,7 +41,8 @@ public class EvolveData {
             hero.setPhoto(IMAGE[position]);
             hero.setName(NAME[position]);
             hero.setDesc(DESC[position]);
-            list.add(hero); }
+            list.add(hero);
+        }
         return list;
     }
 }

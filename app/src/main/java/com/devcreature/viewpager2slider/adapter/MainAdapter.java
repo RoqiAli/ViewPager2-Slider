@@ -19,6 +19,13 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.SliderViewHold
 
     private ArrayList<EvolveModel> evolveModels;
     private ViewPager2 viewPager2;
+    private Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            evolveModels.addAll(evolveModels);
+            notifyDataSetChanged();
+        }
+    };
 
     public MainAdapter(ArrayList<EvolveModel> evolveModels, ViewPager2 viewPager2) {
         this.evolveModels = evolveModels;
@@ -33,12 +40,8 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.SliderViewHold
 
     @Override
     public void onBindViewHolder(@NonNull SliderViewHolder holder, int position) {
-        EvolveModel evolveModel = evolveModels.get(position);
-        holder.tvName.setText(evolveModel.getName());
-        holder.tvDesc.setText(evolveModel.getDesc());
-        holder.ivPhoto.setImageResource(evolveModel.getPhoto());
-
-        if (position == evolveModels.size() - 2){
+        holder.setSliderData(evolveModels.get(position));
+        if (position == evolveModels.size() - 1) {
             viewPager2.post(runnable);
         }
     }
@@ -48,7 +51,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.SliderViewHold
         return evolveModels.size();
     }
 
-    class SliderViewHolder extends RecyclerView.ViewHolder{
+    class SliderViewHolder extends RecyclerView.ViewHolder {
 
         private ImageView ivPhoto;
         private TextView tvName;
@@ -60,13 +63,11 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.SliderViewHold
             tvName = itemView.findViewById(R.id.name_pokemon);
             tvDesc = itemView.findViewById(R.id.desc_pokemon);
         }
-    }
 
-    private Runnable runnable = new Runnable() {
-        @Override
-        public void run() {
-            evolveModels.addAll(evolveModels);
-            notifyDataSetChanged();
+        void setSliderData(EvolveModel evolveModel) {
+            ivPhoto.setImageResource(evolveModel.getPhoto());
+            tvName.setText(evolveModel.getName());
+            tvDesc.setText(evolveModel.getDesc());
         }
-    };
+    }
 }
