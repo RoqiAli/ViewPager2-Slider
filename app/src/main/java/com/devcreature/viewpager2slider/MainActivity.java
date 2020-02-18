@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.view.Gravity;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -16,13 +17,15 @@ import com.devcreature.viewpager2slider.model.EvolveModel;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+        implements MainAdapter.OnSlideListener {
 
     private ViewPager2 viewPager2;
     private ArrayList<EvolveModel> models = new ArrayList<>();
     private Handler handler = new Handler();
     private MainAdapter mainAdapter;
     private LinearLayout linearLayout;
+
     private Runnable sliderRunnable = new Runnable() {
         @Override
         public void run() {
@@ -39,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         viewPager2 = findViewById(R.id.view_pager);
 
         models.addAll(EvolveData.getListData());
-        mainAdapter = new MainAdapter(models, viewPager2);
+        mainAdapter = new MainAdapter(models, viewPager2, this);
         viewPager2.setAdapter(mainAdapter);
 
         setupIndicator();
@@ -91,5 +94,10 @@ public class MainActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         handler.postDelayed(sliderRunnable, 5000);
+    }
+
+    @Override
+    public void onSlideClickListener(int position) {
+        Toast.makeText(this, ""+models.get(position).getName(), Toast.LENGTH_SHORT).show();
     }
 }

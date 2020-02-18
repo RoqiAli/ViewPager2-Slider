@@ -19,6 +19,8 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.SliderViewHold
 
     private ArrayList<EvolveModel> evolveModels;
     private ViewPager2 viewPager2;
+    private OnSlideListener onSlideListener;
+
     private Runnable runnable = new Runnable() {
         @Override
         public void run() {
@@ -27,15 +29,16 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.SliderViewHold
         }
     };
 
-    public MainAdapter(ArrayList<EvolveModel> evolveModels, ViewPager2 viewPager2) {
+    public MainAdapter(ArrayList<EvolveModel> evolveModels, ViewPager2 viewPager2, OnSlideListener onSlideListener) {
         this.evolveModels = evolveModels;
         this.viewPager2 = viewPager2;
+        this.onSlideListener = onSlideListener;
     }
 
     @NonNull
     @Override
     public SliderViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new SliderViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_slider, parent, false));
+        return new SliderViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_slider, parent, false), onSlideListener);
     }
 
     @Override
@@ -51,17 +54,20 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.SliderViewHold
         return evolveModels.size();
     }
 
-    class SliderViewHolder extends RecyclerView.ViewHolder {
+    class SliderViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private ImageView ivPhoto;
         private TextView tvName;
         private TextView tvDesc;
+        private OnSlideListener onSlideListener;
 
-        SliderViewHolder(@NonNull View itemView) {
+        SliderViewHolder(@NonNull View itemView, OnSlideListener onSlideListener) {
             super(itemView);
             ivPhoto = itemView.findViewById(R.id.main_image);
             tvName = itemView.findViewById(R.id.name_pokemon);
             tvDesc = itemView.findViewById(R.id.desc_pokemon);
+            this.onSlideListener = onSlideListener;
+            itemView.setOnClickListener(this);
         }
 
         void setSliderData(EvolveModel evolveModel) {
@@ -69,5 +75,14 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.SliderViewHold
             tvName.setText(evolveModel.getName());
             tvDesc.setText(evolveModel.getDesc());
         }
+
+        @Override
+        public void onClick(View v) {
+            onSlideListener.onSlideClickListener(getAdapterPosition());
+        }
+    }
+
+    public interface OnSlideListener {
+        void onSlideClickListener(int position);
     }
 }
